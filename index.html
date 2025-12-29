@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FxBloodSMP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#0b1d3a,#000 65%,#6b0000);
+  color:#fff;
+  scroll-behavior:smooth;
+}
+
+/* TOP BAR */
+.top-bar{
+  position:fixed;top:20px;left:0;width:100%;
+  display:flex;justify-content:space-between;
+  padding:0 30px;z-index:10;
+}
+.discord-btn{
+  background:#5865F2;padding:12px 26px;border-radius:18px;
+  box-shadow:0 0 20px rgba(88,101,242,.8);
+  cursor:pointer;
+}
+.ip-btn{
+  background:#1e7f34;padding:12px 26px;border-radius:18px;
+  box-shadow:0 0 20px rgba(30,127,52,.8);
+  cursor:pointer;
+}
+
+/* HERO */
+header{
+  text-align:center;padding-top:140px;padding-bottom:50px;
+  position:relative;
+}
+header::before{
+  content:'';position:absolute;inset:0;
+  background:url('logo.png') center 160px/350px no-repeat;
+  opacity:.18;filter:blur(2px);z-index:-1;
+}
+.title{font-size:3.6rem;margin-bottom:25px}
+.fx,.smp{
+  background:linear-gradient(90deg,#00aaff,#ff00ff,#00ffcc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.blood{color:#ff0000;text-shadow:0 0 25px red}
+
+.actions{
+  display:flex;justify-content:center;gap:30px;
+}
+.action-btn{
+  padding:14px 30px;border-radius:22px;
+  background:#000;box-shadow:0 0 25px rgba(255,0,150,.8);
+  cursor:pointer;
+}
+
+/* MODES */
+.modes-section{padding-bottom:80px}
+.modes-title{
+  text-align:center;font-size:2.3rem;margin-bottom:35px;
+  background:linear-gradient(90deg,#ff0033,#00aaff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.modes{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-areas:
+    "oneblock . bedwars"
+    ". lifesteal ."
+    "skyblock . kitpvp";
+  gap:40px;padding:0 80px;
+}
+.mode{
+  background:rgba(0,0,0,.75);
+  padding:34px;border-radius:28px;
+  cursor:pointer;position:relative;
+}
+.mode::before{
+  content:'';position:absolute;inset:-3px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#ff0033,#00aaff);
+  filter:blur(18px);opacity:.6;z-index:-1;
+}
+.mode h3{text-align:center}
+
+.oneblock{grid-area:oneblock}
+.bedwars{grid-area:bedwars}
+.lifesteal{grid-area:lifesteal}
+.skyblock{grid-area:skyblock}
+.kitpvp{grid-area:kitpvp}
+
+/* DETAILS */
+.details-section{padding:120px 100px}
+.details-box{
+  display:none;
+  padding:60px;border-radius:30px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+.details-box::before{
+  content:'';
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.78);
+  border-radius:30px;
+}
+.details-content{position:relative;z-index:2}
+.details-box h2{text-align:center;margin-bottom:25px}
+.details-box p{line-height:1.9;white-space:pre-line}
+
+/* MOBILE */
+@media(max-width:900px){
+  .modes{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "lifesteal"
+      "oneblock"
+      "bedwars"
+      "skyblock"
+      "kitpvp";
+    padding:0 30px;
+  }
+  .details-section{padding:80px 25px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+  <div class="discord-btn" onclick="navigator.clipboard.writeText('https://discord.gg/YsEwzjHB')">💬 DISCORD</div>
+  <div class="ip-btn" onclick="navigator.clipboard.writeText('play.fxbloodsmp.fun')">🟩 SERVER IP</div>
+</div>
+
+<header>
+  <div class="title"><span class="fx">Fx</span><span class="blood">Blood</span><span class="smp">SMP</span></div>
+  <div class="actions">
+    <div class="action-btn" onclick="location.href='store.html'">🛒 SERVER STORE</div>
+    <div class="action-btn" onclick="window.open('https://www.youtube.com/@FX_BILLAYE','_blank')">▶ SUBSCRIBE</div>
+  </div>
+</header>
+
+<section class="modes-section">
+  <div class="modes-title">🎮 GAME MODES</div>
+  <div class="modes">
+    <div class="mode oneblock" onclick="show('oneblock')"><h3>🧱 ONEBLOCK</h3></div>
+    <div class="mode bedwars" onclick="show('bedwars')"><h3>🛏 BEDWARS</h3></div>
+    <div class="mode lifesteal" onclick="show('lifesteal')"><h3>❤️ LIFESTEAL</h3></div>
+    <div class="mode skyblock" onclick="show('skyblock')"><h3>☁ SKYBLOCK</h3></div>
+    <div class="mode kitpvp" onclick="show('kitpvp')"><h3>⚔ KIT-PVP</h3></div>
+  </div>
+</section>
+
+<section class="details-section" id="details">
+
+<!-- LIFESTEAL -->
+<div class="details-box" id="lifesteal" style="background-image:url('Lifesteal.png')">
+<div class="details-content">
+<h2>❤️ LIFESTEAL SMP</h2>
+<p>
+Lifesteal is the most dangerous and intense survival mode on FxBloodSMP.
+Every player starts with a limited number of hearts.
+When you kill another player, you steal one of their hearts.
+When you die, you permanently lose a heart.
+This makes every fight meaningful and risky.
+PvP is always enabled.
+Trust is rare and betrayal is common.
+Alliances can be formed and broken at any time.
+Players can raid bases without warning.
+Hearts are the true currency of power.
+The more hearts you have, the stronger you become.
+Low-heart players must hide or negotiate.
+High-heart players become targets.
+Custom crafting recipes allow heart trading.
+Totems and enchantments play a key role.
+Griefing is allowed.
+Raiding is encouraged.
+Economy is fully player-driven.
+No admin interference in fights.
+War events happen regularly.
+Players can declare wars on teams.
+Special commands are limited to keep balance.
+Deaths feel real and impactful.
+Every decision matters.
+Survival skills are tested.
+PvP skill decides your fate.
+This mode rewards strategy, combat, and psychology.
+Lifesteal is pure chaos and adrenaline.
+Only the strongest survive.
+</p>
+</div>
+</div>
+
+<!-- ONEBLOCK -->
+<div class="details-box" id="oneblock" style="background-image:url('OneBlock.png')">
+<div class="details-content">
+<h2>🧱 ONEBLOCK</h2>
+<p>
+OneBlock starts with a single floating block.
+Breaking the block regenerates it instantly.
+Each phase unlocks new items.
+Early game gives basic materials.
+Later phases unlock mobs and structures.
+Players must carefully manage resources.
+Sky-based survival mechanics apply.
+Falling means death.
+Automation is possible.
+Custom phases are added.
+Rare loot can be obtained.
+Progression is linear but challenging.
+Island expansion is strategic.
+Mob farms are essential.
+Trading systems exist.
+Co-op islands are allowed.
+Solo players can thrive.
+Limited space increases difficulty.
+Late game includes bosses.
+Special rewards are hidden.
+Exploration happens vertically.
+Building creativity is rewarded.
+AFK farms are allowed.
+No pay-to-win mechanics.
+Pure grind and patience.
+Great for chill players.
+OneBlock tests efficiency.
+A calm but deep experience.
+</p>
+</div>
+</div>
+
+<!-- BEDWARS -->
+<div class="details-box" id="bedwars" style="background-image:url('BedWars.png')">
+<div class="details-content">
+<h2>🛏 BEDWARS</h2>
+<p>
+BedWars is a competitive team-based mode.
+Each team has a bed.
+As long as the bed exists, you can respawn.
+Destroy enemy beds to eliminate them.
+Teams collect resources.
+Generators provide iron, gold, emeralds.
+Shops allow upgrades.
+Team coordination is key.
+Rush strategies exist.
+Defense strategies exist.
+Map awareness is crucial.
+PvP skill matters.
+Bridging skill is important.
+Custom kits are available.
+Ranked matches exist.
+Casual games available.
+Anti-cheat enforced.
+Fair matchmaking system.
+Tournaments happen weekly.
+Leaderboards track wins.
+Clutch moments define games.
+Fast-paced gameplay.
+Perfect for competitive players.
+High replay value.
+Pure adrenaline.
+</p>
+</div>
+</div>
+
+<!-- SKYBLOCK -->
+<div class="details-box" id="skyblock" style="background-image:url('SkyBlock.png')">
+<div class="details-content">
+<h2>☁ SKYBLOCK</h2>
+<p>
+SkyBlock begins on a small island.
+Limited resources define early gameplay.
+Players expand islands carefully.
+Cobblestone generators are essential.
+Farming systems grow progression.
+Mob grinders provide loot.
+Custom islands available.
+Economy based on player trading.
+Island levels determine ranking.
+Challenges provide rewards.
+Co-op islands supported.
+Custom enchantments available.
+Island protection enabled.
+No random griefing.
+Events happen regularly.
+Boss islands exist.
+Seasonal updates added.
+Long-term progression focus.
+Relaxed survival experience.
+Perfect for builders.
+Automation is rewarded.
+End-game content exists.
+Consistent updates.
+</p>
+</div>
+</div>
+
+<!-- KITPVP -->
+<div class="details-box" id="kitpvp" style="background-image:url('KitPVP.jpg')">
+<div class="details-content">
+<h2>⚔ KIT-PVP</h2>
+<p>
+KitPvP is pure combat mode.
+Instant action gameplay.
+Choose a kit and fight.
+No resource grinding.
+Fast respawns.
+Balanced kits available.
+Custom abilities per kit.
+Leaderboards track kills.
+No pay-to-win.
+Skill-based combat.
+Practice PvP techniques.
+Perfect aim training.
+Combo mastery matters.
+Potion usage critical.
+Arena-based combat.
+Events and tournaments.
+Casual and ranked modes.
+Great warm-up mode.
+Non-stop action.
+No downtime.
+Pure PvP fun.
+</p>
+</div>
+</div>
+
+</section>
+
+<script>
+function show(id){
+  document.querySelectorAll('.details-box').forEach(b=>b.style.display='none');
+  document.getElementById(id).style.display='block';
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>

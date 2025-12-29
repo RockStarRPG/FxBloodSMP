@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FxBloodSMP Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#14001f,#000 65%,#3a0010);
+  color:#fff;
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{text-align:center;padding:120px 20px 40px}
+header h1{
+  font-size:3.2rem;
+  background:linear-gradient(90deg,#ff004c,#00f0ff,#ff00ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:rgbText 6s linear infinite;
+}
+@keyframes rgbText{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+/* RANK GRID */
+.ranks{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+  padding:40px;
+}
+
+/* RANK CARD */
+.rank{
+  position:relative;
+  padding:28px;
+  border-radius:30px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .5s ease;
+}
+.rank:hover{transform:translateY(-10px) scale(1.03)}
+
+.rank::before{
+  content:'';
+  position:absolute;
+  inset:-3px;
+  background:linear-gradient(120deg,#ff004c,#00f0ff,#ff00ff,#00ff99);
+  animation:rgbBorder 6s linear infinite;
+  z-index:-1;
+}
+@keyframes rgbBorder{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+.rank::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  border-radius:30px;
+  z-index:-1;
+}
+
+/* TEXT */
+.rank h2{
+  text-align:center;
+  font-size:1.5rem;
+  margin-bottom:10px;
+  text-shadow:0 0 20px rgba(255,255,255,.9);
+}
+.price{
+  text-align:center;
+  font-size:1.3rem;
+  margin-bottom:15px;
+  color:#fff;
+  text-shadow:0 0 20px #fff;
+}
+
+/* PERKS */
+.perks{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .8s ease, opacity .8s ease;
+  opacity:0;
+  font-size:.95rem;
+  line-height:1.9;
+}
+.perks.show{
+  max-height:1200px;
+  opacity:1;
+}
+
+/* PAY SECTION */
+.pay-section{text-align:center;padding:70px 20px}
+.pay-section h2{
+  font-size:2.2rem;
+  margin-bottom:25px;
+  background:linear-gradient(90deg,#00ffaa,#ff00ff,#ff0055);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.pay-actions{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-bottom:30px;
+}
+
+.pay-btn{
+  padding:14px 36px;
+  border-radius:25px;
+  background:#000;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  animation:pulse 3s infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 25px rgba(255,0,200,.7)}
+  50%{box-shadow:0 0 45px rgba(0,255,255,1)}
+}
+
+.qr img{
+  width:270px;
+  border-radius:25px;
+  box-shadow:0 0 40px rgba(255,0,0,.9);
+}
+
+/* INSTRUCTIONS */
+.instructions{
+  display:none;
+  padding:80px 40px;
+}
+.instructions h2{
+  text-align:center;
+  font-size:2rem;
+  margin-bottom:30px;
+  background:linear-gradient(90deg,#ff0055,#00f0ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.instructions ol{
+  max-width:900px;
+  margin:auto;
+  line-height:2.1;
+  font-size:1rem;
+}
+
+/* FOOTER */
+.footer{text-align:center;padding:40px}
+.footer a{color:#5865F2;text-decoration:none;font-weight:600}
+.back{
+  margin-top:30px;
+  display:inline-block;
+  padding:14px 36px;
+  border-radius:24px;
+  background:#000;
+  box-shadow:0 0 35px rgba(0,255,255,.8);
+  cursor:pointer;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .ranks{grid-template-columns:1fr}
+  .pay-actions{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🛒 FxBloodSMP STORE</h1>
+</header>
+
+<section class="ranks">
+
+<div class="rank" onclick="toggle('vip')">
+<h2>VIP</h2>
+<div class="price">₹200</div>
+<div class="perks" id="vip">
++5% extra money from economy sources  
+Slightly better loot luck  
+Basic commands  
+Small lifesteal advantage  
+/feed (10–15 min cooldown)  
+/craft  
+/enderchest  
++0.5 extra heart on kill
+</div>
+</div>
+
+<div class="rank" onclick="toggle('elite')">
+<h2>ELITE</h2>
+<div class="price">₹450</div>
+<div class="perks" id="elite">
++10% money bonus  
+Better loot & crate luck  
+Stronger lifesteal rewards  
+/feed (5 min cooldown)  
+/heal (long cooldown)  
+/anvil  
++10% sell bonus  
++10% luck  
++ VIP PERKS INCLUDED
+</div>
+</div>
+
+<div class="rank" onclick="toggle('titan')">
+<h2>TITAN</h2>
+<div class="price">₹750</div>
+<div class="perks" id="titan">
++20% economy boost  
+High loot luck  
+Strong lifesteal gains  
+/feed (no cooldown)  
+/heal (short cooldown)  
+/repair hand  
++20% sell bonus  
++20% luck  
+Ultra cosmetics  
+More in-game commands  
++ ELITE + VIP PERKS
+</div>
+</div>
+
+<div class="rank" onclick="toggle('legend')">
+<h2>LEGEND</h2>
+<div class="price">₹1200</div>
+<div class="perks" id="legend">
++30–40% economy bonus  
+Best loot & crate luck  
+Maximum lifesteal advantage  
+/feed & /heal (no cooldown)  
+/repair all  
+/fly (spawn / timed)  
++30% sell bonus  
++30% luck  
+Special chat prefix & glow  
+Lobby animations  
+Chat colors  
+Ultra premium cosmetics  
+Many extra commands  
++ VIP + ELITE + TITAN PERKS
+</div>
+</div>
+
+</section>
+
+<section class="pay-section">
+<h2>📲 Scan & Pay [UPI]</h2>
+
+<div class="pay-actions">
+<div class="pay-btn" onclick="showInstructions()">📜 INSTRUCTIONS</div>
+<div class="pay-btn">📷 SCANNER</div>
+</div>
+
+<div class="qr">
+<img src="scanner.jpg">
+</div>
+</section>
+
+<section class="instructions" id="instructions">
+<h2>📜 PAYMENT INSTRUCTIONS</h2>
+<ol>
+<li>Read carefully</li>
+<li>Scan the QR</li>
+<li>Enter correct amount</li>
+<li>Hit payment</li>
+<li>Take screenshot or video proof</li>
+<li>Join Discord server</li>
+<li>Go to support area</li>
+<li>Talk to owner or admin</li>
+<li>We guarantee this is not a scam</li>
+<li>Refund available under 7 days</li>
+<li>Rank is NOT automatic</li>
+<li>Admin will issue your rank</li>
+<li>For any return contact admin/owner</li>
+</ol>
+</section>
+
+<div class="footer">
+<p>After payment contact admins on <a href="https://discord.gg/YsEwzjHB" target="_blank">Discord</a></p>
+<div class="back" onclick="location.href='index.html'">⬅ Back to Home</div>
+</div>
+
+<script>
+function toggle(id){
+  document.querySelectorAll('.perks').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function showInstructions(){
+  document.getElementById('instructions').style.display='block';
+  document.getElementById('instructions').scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
