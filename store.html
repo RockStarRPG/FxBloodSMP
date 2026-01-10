@@ -1,6 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* USER DISPLAY */
+.user-bar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:1.1rem;
+  padding:10px 26px;
+  border-radius:20px;
+  background:#000;
+  box-shadow:0 0 25px rgba(0,255,255,.9);
+  z-index:20;
+  display:none;
+}
+.user-bar span{
+  background:linear-gradient(90deg,#00f0ff,#ff00ff,#00ffaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:700;
+}
+
+/* AUTH POPUP */
+.auth-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
+}
+.auth-box{
+  width:340px;
+  padding:35px;
+  border-radius:30px;
+  background:#000;
+  box-shadow:0 0 40px rgba(255,0,200,1);
+  text-align:center;
+}
+.auth-box h2{
+  margin-bottom:20px;
+  background:linear-gradient(90deg,#ff00ff,#00f0ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.auth-box input{
+  width:100%;
+  margin:10px 0;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  outline:none;
+}
+.auth-actions{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+}
+.auth-btn{
+  flex:1;
+  padding:12px;
+  border-radius:18px;
+  cursor:pointer;
+  background:#000;
+  box-shadow:0 0 20px rgba(0,255,255,.8);
+}
+</style>
+
 <meta charset="UTF-8">
 <title>FxBloodSMP Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,6 +247,21 @@ header h1{
 </head>
 
 <body>
+<div class="user-bar" id="userBar">
+  Logged in as <span id="usernameDisplay"></span>
+</div>
+
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <h2>SIGN IN / SIGN UP</h2>
+    <input id="authUser" placeholder="In-Game Username">
+    <input id="authPass" type="password" placeholder="Password">
+    <div class="auth-actions">
+      <div class="auth-btn" onclick="signup()">SIGN UP</div>
+      <div class="auth-btn" onclick="signin()">SIGN IN</div>
+    </div>
+  </div>
+</div>
 
 <header>
   <h1>🛒 FxBloodSMP STORE</h1>
@@ -187,88 +271,71 @@ header h1{
 
 <div class="rank" onclick="toggle('vip')">
 <h2>VIP</h2>
-<div class="price">₹200-->150</div>
+<div class="price">₹200</div>
 <div class="perks" id="vip">
-+5% extra money from economy sources.  
-Slightly better loot luck.  
-Basic commands. 
-Small lifesteal advantage.  
-/feed (10–15 min cooldown).  
-/craft.  
-/enderchest. 
-+0.5 extra heart on kill.
-In game MONEY.
-Essentials Advantages.
-VIP KITS.
++5% extra money from economy sources  
+Slightly better loot luck  
+Basic commands  
+Small lifesteal advantage  
+/feed (10–15 min cooldown)  
+/craft  
+/enderchest  
++0.5 extra heart on kill
 </div>
 </div>
 
 <div class="rank" onclick="toggle('elite')">
 <h2>ELITE</h2>
-<div class="price">₹450-->350</div>
+<div class="price">₹450</div>
 <div class="perks" id="elite">
 +10% money bonus  
-Better loot & crate luck.  
-Stronger lifesteal rewards.  
-/feed (5 min cooldown).  
-/heal (long cooldown). 
-/anvil.  
-+10% sell bonus.  
-+10% luck.
-Essentails More Cmds. 
-ELITE KITS.
-Crate KEYS.
-IN GAME MONEY.
-+ VIP PERKS INCLUDED.
+Better loot & crate luck  
+Stronger lifesteal rewards  
+/feed (5 min cooldown)  
+/heal (long cooldown)  
+/anvil  
++10% sell bonus  
++10% luck  
++ VIP PERKS INCLUDED
 </div>
 </div>
 
 <div class="rank" onclick="toggle('titan')">
 <h2>TITAN</h2>
-<div class="price">₹750-->600</div>
+<div class="price">₹750</div>
 <div class="perks" id="titan">
-+20% economy boost.  
-High loot luck.  
-Strong lifesteal gains.  
-/feed (no cooldown).  
-/heal (short cooldown).  
-/repair hand.  
-+20% sell bonus.  
-+20% luck.  
-Ultra cosmetics.  
-More in-game commands.
-IN GAME MOENY.
-ESSENTALS ADVANCE CMDS.
-TITAN KITS.
-CRATE KEYS. 
-MUCH MORE. 
-WORTH IT!!.
-+ ELITE + VIP PERKS.
++20% economy boost  
+High loot luck  
+Strong lifesteal gains  
+/feed (no cooldown)  
+/heal (short cooldown)  
+/repair hand  
++20% sell bonus  
++20% luck  
+Ultra cosmetics  
+More in-game commands  
++ ELITE + VIP PERKS
 </div>
 </div>
 
 <div class="rank" onclick="toggle('legend')">
 <h2>LEGEND</h2>
-<div class="price">₹1200-->999</div>
+<div class="price">₹1200</div>
 <div class="perks" id="legend">
-+30–40% economy bonus.  
-Best loot & crate luck.  
-Maximum lifesteal advantage.  
-/feed & /heal (no cooldown).  
-/repair all.  
-/fly (spawn / timed).  
-+30% sell bonus.  
-+30% luck.  
-Special chat prefix & glow.  
-Lobby animations.  
-Chat colors.  
-Ultra premium cosmetics.
-LEGEND ESSENTAILS CMDS.
-LEGEND KIT.
-IN GAME MONEY.
-CRATE KEY.
-Many extra commands.  
-+ VIP + ELITE + TITAN PERKS.
++30–40% economy bonus  
+Best loot & crate luck  
+Maximum lifesteal advantage  
+/feed & /heal (no cooldown)  
+/repair all  
+/fly (spawn / timed)  
++30% sell bonus  
++30% luck  
+Special chat prefix & glow  
+Lobby animations  
+Chat colors  
+Ultra premium cosmetics  
+Many extra commands  
++ VIP + ELITE + TITAN PERKS
 </div>
 </div>
 
@@ -319,6 +386,51 @@ function toggle(id){
 function showInstructions(){
   document.getElementById('instructions').style.display='block';
   document.getElementById('instructions').scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+<script>
+const userBar = document.getElementById('userBar');
+const usernameDisplay = document.getElementById('usernameDisplay');
+const authOverlay = document.getElementById('authOverlay');
+
+function checkLogin(){
+  const user = localStorage.getItem('fx_user');
+  if(user){
+    userBar.style.display = 'block';
+    usernameDisplay.innerText = user;
+  }
+}
+checkLogin();
+
+function requireAuth(action){
+  if(!localStorage.getItem('fx_user')){
+    authOverlay.style.display = 'flex';
+    return false;
+  }
+  action();
+}
+
+function signup(){
+  const u = authUser.value.trim();
+  const p = authPass.value;
+  if(!u || !p) return alert('Fill all fields');
+  localStorage.setItem('fx_user',u);
+  localStorage.setItem('fx_pass',p);
+  location.reload();
+}
+
+function signin(){
+  const u = authUser.value.trim();
+  const p = authPass.value;
+  if(
+    u === localStorage.getItem('fx_user') &&
+    p === localStorage.getItem('fx_pass')
+  ){
+    location.reload();
+  }else{
+    alert('Invalid login');
+  }
 }
 </script>
 
