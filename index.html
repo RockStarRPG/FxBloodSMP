@@ -1,6 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* USER DISPLAY */
+.user-bar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:1.1rem;
+  padding:10px 26px;
+  border-radius:20px;
+  background:#000;
+  box-shadow:0 0 25px rgba(0,255,255,.9);
+  z-index:20;
+  display:none;
+}
+.user-bar span{
+  background:linear-gradient(90deg,#00f0ff,#ff00ff,#00ffaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:700;
+}
+
+/* AUTH POPUP */
+.auth-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
+}
+.auth-box{
+  width:340px;
+  padding:35px;
+  border-radius:30px;
+  background:#000;
+  box-shadow:0 0 40px rgba(255,0,200,1);
+  text-align:center;
+}
+.auth-box h2{
+  margin-bottom:20px;
+  background:linear-gradient(90deg,#ff00ff,#00f0ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.auth-box input{
+  width:100%;
+  margin:10px 0;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  outline:none;
+}
+.auth-actions{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+}
+.auth-btn{
+  flex:1;
+  padding:12px;
+  border-radius:18px;
+  cursor:pointer;
+  background:#000;
+  box-shadow:0 0 20px rgba(0,255,255,.8);
+}
+</style>
+
 <meta charset="UTF-8">
 <title>FxBloodSMP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,29 +200,62 @@ header::before{
 </head>
 
 <body>
+<div class="user-bar" id="userBar">
+  Logged in as <span id="usernameDisplay"></span>
+</div>
+
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <h2>SIGN IN / SIGN UP</h2>
+    <input id="authUser" placeholder="In-Game Username">
+    <input id="authPass" type="password" placeholder="Password">
+    <div class="auth-actions">
+      <div class="auth-btn" onclick="signup()">SIGN UP</div>
+      <div class="auth-btn" onclick="signin()">SIGN IN</div>
+    </div>
+  </div>
+</div>
 
 <div class="top-bar">
-  <div class="discord-btn" onclick="navigator.clipboard.writeText('https://discord.gg/YsEwzjHB')">💬 COPY DISCORD</div>
-  <div class="ip-btn" onclick="navigator.clipboard.writeText('mc.fxbloodsmp.fun:26838')">🟩 COPY SERVER IP</div>
+  <div class="discord-btn" id="discordBtn" onclick="copyDiscord()">💬 COPY DISCORD</div>
+  <div class="ip-btn" id="ipBtn" onclick="copyIP()">🟩 COPY SERVER IP</div>
 </div>
+
+<script>
+function copyDiscord(){
+  navigator.clipboard.writeText('https://discord.gg/YsEwzjHB');
+  const btn = document.getElementById('discordBtn');
+  const old = btn.innerHTML;
+  btn.innerHTML = '✅ COPIED!';
+  setTimeout(()=>btn.innerHTML = old, 2000);
+}
+
+function copyIP(){
+  navigator.clipboard.writeText('mc.fxbloodsmp.fun:26838');
+  const btn = document.getElementById('ipBtn');
+  const old = btn.innerHTML;
+  btn.innerHTML = '✅ COPIED!';
+  setTimeout(()=>btn.innerHTML = old, 2000);
+}
+</script>
 
 <header>
   <div class="title"><span class="fx">Fx</span><span class="blood">Blood</span><span class="smp">SMP</span></div>
   <div class="actions">
-    <div class="action-btn" onclick="location.href='store.html'">🛒 SERVER STORE</div>
-    <div class="action-btn" onclick="window.open('https://www.youtube.com/@FX_BILLAYE','_blank')">▶ SUBSCRIBE</div>
-  </div>
+  <div class="action-btn" onclick="requireAuth(()=>location.href='store.html')">🛒 SERVER STORE</div>
+  <div class="action-btn" onclick="window.open('https://www.youtube.com/@FX_BILLAYE','_blank')">▶ SUBSCRIBE</div>
+</div>
 </header>
 
 <section class="modes-section">
   <div class="modes-title">🎮 GAME MODES</div>
   <div class="modes">
-    <div class="mode oneblock" onclick="show('oneblock')"><h3>🧱 ONEBLOCK</h3></div>
-    <div class="mode bedwars" onclick="show('bedwars')"><h3>🛏 BEDWARS</h3></div>
-    <div class="mode lifesteal" onclick="show('lifesteal')"><h3>❤️ LIFESTEAL</h3></div>
-    <div class="mode skyblock" onclick="show('skyblock')"><h3>☁ SKYBLOCK</h3></div>
-    <div class="mode kitpvp" onclick="show('kitpvp')"><h3>⚔ KIT-PVP</h3></div>
-  </div>
+  <div class="mode oneblock" onclick="requireAuth(()=>show('oneblock'))"><h3>🧱 ONEBLOCK</h3></div>
+  <div class="mode bedwars" onclick="requireAuth(()=>show('bedwars'))"><h3>🛏 BEDWARS</h3></div>
+  <div class="mode lifesteal" onclick="requireAuth(()=>show('lifesteal'))"><h3>❤️ LIFESTEAL</h3></div>
+  <div class="mode skyblock" onclick="requireAuth(()=>show('skyblock'))"><h3>☁ SKYBLOCK</h3></div>
+  <div class="mode kitpvp" onclick="requireAuth(()=>show('kitpvp'))"><h3>⚔ KIT-PVP</h3></div>
+</div>
 </section>
 
 <section class="details-section" id="details">
@@ -336,6 +438,51 @@ function show(id){
   document.querySelectorAll('.details-box').forEach(b=>b.style.display='none');
   document.getElementById(id).style.display='block';
   document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+<script>
+const userBar = document.getElementById('userBar');
+const usernameDisplay = document.getElementById('usernameDisplay');
+const authOverlay = document.getElementById('authOverlay');
+
+function checkLogin(){
+  const user = localStorage.getItem('fx_user');
+  if(user){
+    userBar.style.display = 'block';
+    usernameDisplay.innerText = user;
+  }
+}
+checkLogin();
+
+function requireAuth(action){
+  if(!localStorage.getItem('fx_user')){
+    authOverlay.style.display = 'flex';
+    return false;
+  }
+  action();
+}
+
+function signup(){
+  const u = authUser.value.trim();
+  const p = authPass.value;
+  if(!u || !p) return alert('Fill all fields');
+  localStorage.setItem('fx_user',u);
+  localStorage.setItem('fx_pass',p);
+  location.reload();
+}
+
+function signin(){
+  const u = authUser.value.trim();
+  const p = authPass.value;
+  if(
+    u === localStorage.getItem('fx_user') &&
+    p === localStorage.getItem('fx_pass')
+  ){
+    location.reload();
+  }else{
+    alert('Invalid login');
+  }
 }
 </script>
 
