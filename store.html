@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FxBloodSMP Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{
+  background:radial-gradient(circle at top,#14001f,#000 65%,#3a0010);
+  color:#fff;
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{text-align:center;padding:120px 20px 40px}
+header h1{
+  font-size:3.2rem;
+  background:linear-gradient(90deg,#ff004c,#00f0ff,#ff00ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:rgbText 6s linear infinite;
+}
+@keyframes rgbText{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+/* RANK GRID */
+.ranks{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+  padding:40px;
+}
+
+/* RANK CARD */
+.rank{
+  position:relative;
+  padding:28px;
+  border-radius:30px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .5s ease;
+}
+.rank:hover{transform:translateY(-10px) scale(1.03)}
+
+.rank::before{
+  content:'';
+  position:absolute;
+  inset:-3px;
+  background:linear-gradient(120deg,#ff004c,#00f0ff,#ff00ff,#00ff99);
+  animation:rgbBorder 6s linear infinite;
+  z-index:-1;
+}
+@keyframes rgbBorder{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+.rank::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  border-radius:30px;
+  z-index:-1;
+}
+
+/* TEXT */
+.rank h2{
+  text-align:center;
+  font-size:1.5rem;
+  margin-bottom:10px;
+  text-shadow:0 0 20px rgba(255,255,255,.9);
+}
+.price{
+  text-align:center;
+  font-size:1.3rem;
+  margin-bottom:15px;
+  color:#fff;
+  text-shadow:0 0 20px #fff;
+}
+
+/* PERKS */
+.perks{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .8s ease, opacity .8s ease;
+  opacity:0;
+  font-size:.95rem;
+  line-height:1.9;
+}
+.perks.show{
+  max-height:1200px;
+  opacity:1;
+}
+
+/* PAY SECTION */
+.pay-section{text-align:center;padding:70px 20px}
+.pay-section h2{
+  font-size:2.2rem;
+  margin-bottom:25px;
+  background:linear-gradient(90deg,#00ffaa,#ff00ff,#ff0055);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.pay-actions{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-bottom:30px;
+}
+
+.pay-btn{
+  padding:14px 36px;
+  border-radius:25px;
+  background:#000;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  animation:pulse 3s infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 25px rgba(255,0,200,.7)}
+  50%{box-shadow:0 0 45px rgba(0,255,255,1)}
+}
+
+.qr img{
+  width:270px;
+  border-radius:25px;
+  box-shadow:0 0 40px rgba(255,0,0,.9);
+}
+
+/* INSTRUCTIONS */
+.instructions{
+  display:none;
+  padding:80px 40px;
+}
+.instructions h2{
+  text-align:center;
+  font-size:2rem;
+  margin-bottom:30px;
+  background:linear-gradient(90deg,#ff0055,#00f0ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.instructions ol{
+  max-width:900px;
+  margin:auto;
+  line-height:2.1;
+  font-size:1rem;
+}
+
+/* FOOTER */
+.footer{text-align:center;padding:40px}
+.footer a{color:#5865F2;text-decoration:none;font-weight:600}
+.back{
+  margin-top:30px;
+  display:inline-block;
+  padding:14px 36px;
+  border-radius:24px;
+  background:#000;
+  box-shadow:0 0 35px rgba(0,255,255,.8);
+  cursor:pointer;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .ranks{grid-template-columns:1fr}
+  .pay-actions{flex-direction:column}
+}
+
+.payment-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(6px);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+}
+.payment-window{
+  background: linear-gradient(180deg,#111,#000); /* dark professional gradient */
+  padding:50px 40px;         /* bigger padding */
+  border-radius:22px;         /* smooth corners */
+  width:600px;                /* much wider window */
+  max-width:95%;              /* responsive */
+  text-align:center;
+  box-shadow: 0 0 80px rgba(0,255,255,.4); /* soft glow */
+  font-size:1.1rem;           /* bigger default text */
+}
+
+.payment-window h2{
+  margin-bottom:25px;
+  font-size:1.6rem;           /* bigger headings */
+}
+
+.payment-window button{
+  width:100%;
+  padding:18px;
+  margin:15px 0;
+  border:none;
+  border-radius:16px;
+  background: linear-gradient(90deg, #ff004c, #00f0ff, #ff00ff, #00ff99);
+  color:#fff;
+  font-size:1.1rem;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(255,0,200,.6);
+  animation: hueShift 6s linear infinite;
+}
+
+
+.payment-window img{
+  width:90%;
+  max-width:400px;            /* bigger QR */
+  border-radius:16px;
+  margin-bottom:20px;
+}
+
+.payment-window p{
+  font-size:1.1rem;           /* bigger text */
+  line-height:1.6;
+}
+
+.payment-window span{
+  display:block;
+  margin-top:25px;
+  color:#aaa;
+  font-size:1rem;             /* bigger close text */
+  cursor:pointer;
+}
+/* RGB text effect for headings and normal text */
+.rgb-text{
+  background: linear-gradient(90deg, #ff004c, #00f0ff, #ff00ff, #00ff99);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hueShift 6s linear infinite;
+}
+
+@keyframes hueShift {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🛒 FxBloodSMP STORE</h1>
+</header>
+
+<section class="ranks">
+
+<div class="rank" onclick="toggle('vip')">
+<h2>VIP</h2>
+<div class="price">₹200-->150</div>
+<div class="perks" id="vip">
++5% extra money from economy sources.  
+Slightly better loot luck.  
+Basic commands. 
+Small lifesteal advantage.  
+/feed (10–15 min cooldown).  
+/craft.  
+/enderchest. 
++0.5 extra heart on kill.
+In game MONEY.
+Essentials Advantages.
+VIP KITS.
+</div>
+</div>
+
+<div class="rank" onclick="toggle('elite')">
+<h2>ELITE</h2>
+<div class="price">₹450-->350</div>
+<div class="perks" id="elite">
++10% money bonus  
+Better loot & crate luck.  
+Stronger lifesteal rewards.  
+/feed (5 min cooldown).  
+/heal (long cooldown). 
+/anvil.  
++10% sell bonus.  
++10% luck.
+Essentails More Cmds. 
+ELITE KITS.
+Crate KEYS.
+IN GAME MONEY.
++ VIP PERKS INCLUDED.
+</div>
+</div>
+
+<div class="rank" onclick="toggle('titan')">
+<h2>TITAN</h2>
+<div class="price">₹750-->600</div>
+<div class="perks" id="titan">
++20% economy boost.  
+High loot luck.  
+Strong lifesteal gains.  
+/feed (no cooldown).  
+/heal (short cooldown).  
+/repair hand.  
++20% sell bonus.  
++20% luck.  
+Ultra cosmetics.  
+More in-game commands.
+IN GAME MOENY.
+ESSENTALS ADVANCE CMDS.
+TITAN KITS.
+CRATE KEYS. 
+MUCH MORE. 
+WORTH IT!!.
++ ELITE + VIP PERKS.
+</div>
+</div>
+
+<div class="rank" onclick="toggle('legend')">
+<h2>LEGEND</h2>
+<div class="price">₹1200-->999</div>
+<div class="perks" id="legend">
++30–40% economy bonus.  
+Best loot & crate luck.  
+Maximum lifesteal advantage.  
+/feed & /heal (no cooldown).  
+/repair all.  
+/fly (spawn / timed).  
++30% sell bonus.  
++30% luck.  
+Special chat prefix & glow.  
+Lobby animations.  
+Chat colors.  
+Ultra premium cosmetics.
+LEGEND ESSENTAILS CMDS.
+LEGEND KIT.
+IN GAME MONEY.
+CRATE KEY.
+Many extra commands.  
++ VIP + ELITE + TITAN PERKS.
+</div>
+</div>
+
+</section>
+
+<div class="pay-actions">
+  <div class="pay-btn" onclick="showInstructions()">📜 INSTRUCTIONS</div>
+  <div class="pay-btn" onclick="openPaymentOptions()">💳 PAYMENT OPTIONS</div>
+</div>
+
+<div class="qr">
+<img src="scanner.jpg">
+</div>
+</section>
+
+<section class="instructions" id="instructions">
+<h2>📜 PAYMENT INSTRUCTIONS</h2>
+<ol>
+<li>Read carefully</li>
+<li>Scan the QR</li>
+<li>Enter correct amount</li>
+<li>Hit payment</li>
+<li>Take screenshot or video proof</li>
+<li>Join Discord server</li>
+<li>Go to support area</li>
+<li>Talk to owner or admin</li>
+<li>We guarantee this is not a scam</li>
+<li>Refund available under 7 days</li>
+<li>Rank is NOT automatic</li>
+<li>Admin will issue your rank</li>
+<li>For any return contact admin/owner</li>
+</ol>
+</section>
+
+<div class="footer">
+<p>After payment contact admins on <a href="https://discord.gg/YsEwzjHB" target="_blank">Discord</a></p>
+<div class="back" onclick="location.href='index.html'">⬅ Back to Home</div>
+</div>
+
+<script>
+function toggle(id){
+  document.querySelectorAll('.perks').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function showInstructions(){
+  document.getElementById('instructions').style.display='block';
+  document.getElementById('instructions').scrollIntoView({behavior:'smooth'});
+}
+
+function openPaymentOptions(){
+  document.getElementById('paymentOptions').style.display='flex';
+}
+
+function openBank(){
+  closeAll();
+  document.getElementById('bankWindow').style.display='flex';
+}
+
+function openUPI(){
+  closeAll();
+  document.getElementById('upiWindow').style.display='flex';
+}
+
+function closeAll(){
+  document.querySelectorAll('.payment-overlay')
+    .forEach(p=>p.style.display='none');
+}
+
+</script>
+
+<!-- PAYMENT OPTIONS WINDOW -->
+<div class="payment-overlay" id="paymentOptions">
+  <div class="payment-window">
+    <h2>Select Payment Method</h2>
+
+    <button onclick="openBank()">🏦 Bank Payment</button>
+    <button onclick="openUPI()">📷 Scan & Pay (UPI)</button>
+
+    <span onclick="closeAll()">Cancel</span>
+  </div>
+</div>
+
+<!-- BANK PAYMENT WINDOW -->
+<div class="payment-overlay" id="bankWindow">
+  <div class="payment-window">
+    <h2 class="rgb-text">Bank Transfer Details</h2>
+
+    <p class="rgb-text"><b>Bank:</b> Canara Bank</p>
+    <p class="rgb-text"><b>Account Name:</b> YOUR NAME</p>
+    <p><b>Account Number:</b> XXXXXXXXXXXX</p> <!-- sensitive info stays normal -->
+    <p><b>IFSC:</b> CNRB000XXXX</p>             <!-- sensitive info stays normal -->
+
+    <span onclick="closeAll()">Close</span>
+  </div>
+</div>
+
+<!-- UPI PAYMENT WINDOW -->
+<div class="payment-overlay" id="upiWindow">
+  <div class="payment-window">
+    <h2 class="rgb-text">Scan & Pay (UPI)</h2>
+
+    <img src="scanner.jpg">
+    <p class="rgb-text"><b>UPI ID:</b>lokeshkr0111@fam</p>
+
+    <span onclick="closeAll()">Close</span>
+  </div>
+</div>
+
+</body>
+</html>
